@@ -1,3 +1,8 @@
+#!/usr/bin/python
+
+from __future__ import print_function
+import sys, os, datetime, time
+
 #Python script to extract fasta sequences from multi-fasta files.
 #Not useful for extracting larger numbers of reads from raw sequencing data.
 #This should be used to create subsets from gene or protein lists after using
@@ -6,9 +11,6 @@
 #   python exSeqList.py
 #correspondance: d.zendler@gmx.de
 #Tested on python version 2.7.15_1, MacOS High Sierra 10.13.6
-
-from __future__ import print_function
-import sys, os, datetime, time
 
 #Taken from: https://www.agnosticdev.com/content/how-open-file-python
 #Matt Eaton on Sun, 12/17/2017 - 10:35 PM
@@ -85,26 +87,22 @@ def findIndexOfSeq(seqID):
     """function to find the index of the sequences to be extracted"""
     file = File()
     indexList = []
-    #count = 0
+    count = 0
     for line in seqID:
-        #count = count + 1
         #sys.stdout.write("indexing progress: %d%%   \r" % (count))
         #sys.stdout.flush()
         if line != "":
             if '>' not in line:
                 line = ">" + line
             indexList.append(file.file_lines_multiFasta.index(line))
-    return indexList
+            count = count + 1
+    return indexList, count
 
 def extractSeqs(indexList):
     """function to extract the sequences"""
     file = File()
     seq = ''
-    count = 0
     for ind in indexList:
-        count = count + 1
-        sys.stdout.write("extraction progress: %d%%   \r" % (count))
-        sys.stdout.flush()
         seq = seq + file.file_lines_multiFasta[ind] + "\n"
         ind = ind + 1
         while ind < len(file.file_lines_multiFasta):
@@ -119,9 +117,11 @@ def main():
     now = datetime.datetime.now()
     file = File()
     out = open(file.file_input_seqID + '.fa', 'w')
-    indexList = findIndexOfSeq(file.file_lines_seqIDs)
+    count1 = 0
+    indexList, count1 = findIndexOfSeq(file.file_lines_seqIDs)
+    print("exSeqList.py - Number of sequences to extract: " + str(count1))
     seq = extractSeqs(indexList)
-    print(seq)
+    #print(seq)
     out.write(seq)
     out.close()
 

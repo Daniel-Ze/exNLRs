@@ -3,7 +3,7 @@
 echo "#"
 echo "# Calling shell script from: "$(dirname $0)
 
-NLRparserHome=$HOME'/path/to/NLR-parser/' # Edit this line to get the path to your NLR-parser directrory
+NLRparserHome=$HOME'/PostDoc/Programs/NLRparser/' # Edit this line to get the path to your NLR-parser directrory
 
 # Setting up variables
 wd=$(dirname $1)
@@ -20,8 +20,13 @@ if [ -z "$1" ]
       echo "# --------------------------------------------------------"
       echo "# "
       echo "# Predicting NLRs with mast and NLRparser: starting script"
-      echo "#  - Creating directory NLR"
-      mkdir $wd'/NLR'
+      if [ ! -d $wd'/NLR' ]
+          then
+            echo "#  - Creating directory NLR"
+            mkdir $wd'/NLR'
+          else
+            echo "#  - "$wd"/NLR already exists"
+      fi
       echo "#  - Starting mast "$(mast -version)" with NLRparser meme.xml"
       mast $NLRparserHome'/meme.xml' $1 -o $wd'/NLR/meme' | tee $wd'/NLR/exNLRs.stderr'
       echo "#  - mast results are written to NLR/meme/"
@@ -46,10 +51,12 @@ if [ -z "$1" ]
       echo "$(grep -w 'complete' $NLRs | wc -l)\tcomplete NLRs" | tee -a $wd'/NLR/'$SeqFileName'.nlrparser.stats'
       echo "$(grep -w 'CNL.*complete' $NLRs | wc -l)\tcomplete CNLs" | tee -a $wd'/NLR/'$SeqFileName'.nlrparser.stats'
       echo "$(grep -w 'TNL.*complete' $NLRs | wc -l)\tcomplete TNLs" | tee -a $wd'/NLR/'$SeqFileName'.nlrparser.stats'
+      echo "$(grep -w 'complete' $NLRs | cut -f2 | grep -w 'N/A' | wc -l)\tcomplete NA" | tee -a $wd'/NLR/'$SeqFileName'.nlrparser.stats'
 
       echo "$(grep -w 'partial' $NLRs | wc -l)\tpartial NLRs" | tee -a $wd'/NLR/'$SeqFileName'.nlrparser.stats'
       echo "$(grep -w 'CNL.*partial' $NLRs | wc -l)\tpartial CNLs" | tee -a $wd'/NLR/'$SeqFileName'.nlrparser.stats'
       echo "$(grep -w 'TNL.*partial' $NLRs | wc -l)\tpartial TNLs" | tee -a $wd'/NLR/'$SeqFileName'.nlrparser.stats'
+      echo "$(grep -w 'partial' $NLRs | cut -f2 | grep -w 'N/A' | wc -l)\tpartial NA" | tee -a $wd'/NLR/'$SeqFileName'.nlrparser.stats'
       echo ""
       echo "# NLR stats saved to file "$wd'/NLR/'$SeqFileName'.nlrparser.stats'
       echo ""
@@ -67,7 +74,7 @@ if [ -z "$1" ]
       # If there are complte NLRs predicted then extract them to a file for further processing
           else
             echo "# "
-            echo "# Extracting sequence names of "$(grep -w 'complete' $NLRs | wc -l)" complete NLRs"
+            echo "# Extracting sequence names of "$(grep -w 'complete' $NLRs | wc -l)" complete and "$(grep -w 'partial' $NLRs | wc -l)" partial NLRs"
 
             grep -w 'complete' $NLRs > $wd'/NLR/'$SeqFileName'.complete.nlrparser' 2>> $wd'/NLR/exNLRs.stderr'
             cut -f 1 $wd'/NLR/'$SeqFileName'.complete.nlrparser' > $wd'/NLR/'$SeqFileName'.complete.nlrparser.seqname' 2>> $wd'/NLR/exNLRs.stderr'
@@ -82,7 +89,7 @@ if [ -z "$1" ]
             echo "# Extracting complete NLR sequences"
             echo "#  - running python script exSeqList.py"
 
-            python $NLRparserHome'/exSeqList.py' $wd'/NLR/'$SeqFileName'.complete.nlrparser.seqname' $1 1> '/dev/null' 2>> $wd'/NLR/exNLRs.stderr'
+            python $NLRparserHome'/exSeqList.py' $wd'/NLR/'$SeqFileName'.complete.nlrparser.seqname' $1 2>> $wd'/NLR/exNLRs.stderr'
 
             echo "#  - Fasta file with complete NLRs written to "$wd'/NLR/'$SeqFileName'.complete.nlrparser.seqname.fa'
             echo "# "
@@ -91,15 +98,15 @@ if [ -z "$1" ]
             echo "# Extracting partial NLR sequences"
             echo "#  - running python script exSeqList.py"
 
-            python $NLRparserHome'/exSeqList.py' $wd'/NLR/'$SeqFileName'.partial.nlrparser.seqname' $1 1> '/dev/null' 2>> $wd'/NLR/exNLRs.stderr'
+            python $NLRparserHome'/exSeqList.py' $wd'/NLR/'$SeqFileName'.partial.nlrparser.seqname' $1 2>> $wd'/NLR/exNLRs.stderr'
 
             echo "#  - Fasta file with complete NLRs written to "$wd'/NLR/'$SeqFileName'.partial.nlrparser.seqname.fa'
             echo "# "
             echo "# --------------------------------------------------------"
             echo "#"
-            echo "# Sequences of complete NLRs (CNL and TNL) extracted"
+            echo "# Sequences of complete and partial NLRs (CNL and TNL) extracted"
             echo "# Cleaning"
             rm $NLRs 2>> $wd'/NLR/exNLRs.stderr'
-            echo "# Date:                                                          "$(date +%d-%m-%Y_%H-%M-%S)
+            echo "# Date:                          "$(date +%d-%m-%Y_%H-%M-%S)
       fi
 fi
