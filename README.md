@@ -27,7 +27,7 @@ Github page of NLR-parser:
   3. parse mast results with NLR-parser.jar
   4. generate some stats about the amount of different NLRs identified with mast
   5. plot the stats with plot-nlr.r
-  6. extract the **complete** NLR sequence names and subsequently the corresponding sequence with exSeqList.py (exSeqList.py can extract any fasta sequence from any multifasta file: exSeqList.py seqNames multifasta.fa)
+  6. extract the **complete** and **partial** NLR sequence names and subsequently the corresponding sequence with exSeqList.py (exSeqList.py can extract any fasta sequence from any multifasta file: exSeqList.py seqNames multifasta.fa)
   7. everythings saved in the directory NLR
   8. all errors are printed to file exNLR.stderr
 
