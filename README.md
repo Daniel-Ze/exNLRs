@@ -1,4 +1,4 @@
-# **NLR-parser additional scripts:** exNLRs.sh, plot-nlr.r, exSeqList.py
+# *NLR-parser additional scripts:* exNLRs.sh, plot-nlr.r, exSeqList.py
 
 ## Description
 
