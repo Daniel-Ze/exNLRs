@@ -1,6 +1,6 @@
-# NLR-parser additional scripts: exNLRs.sh, plot-nlr.r, exSeqList.py {-}
+# NLR-parser additional scripts: exNLRs.sh, plot-nlr.r, exSeqList.py
 
-## Description {-}
+## Description
 
 The shell script exNLRs.sh was written around the java application NLR-parser.jar by Steuernagel et al., 2015 to automate the extraction of NLRs after prediction of proteins. The script takes in a multifasta file and runs NLR-parser over it. NLR-parser is run with standard settings (p-value 1E-5) and complete and partial NLRs are written to multifasta file.
 
@@ -20,7 +20,7 @@ Github page of NLR-parser:
 
 [https://github.com/steuernb/NLR-parser](https://github.com/steuernb/NLR-parser "NLR-parser")
 
-### What does the script do {-}
+### What does the script do
 
   1. make directory NLR in the same directory where the multi fasta file is located
   2. call mast with the meme.xml file from NLR-parser
@@ -31,7 +31,7 @@ Github page of NLR-parser:
   7. everythings saved in the directory NLR
   8. all errors are printed to file exNLR.stderr
 
-### What does it depend on {-}
+### What does it depend on
 
 Dependencies of this script:
 
@@ -41,7 +41,7 @@ Dependencies of this script:
   - python 2.7 or 3.6
     - python script exSeqList.py
 
-## How to get it running {-}
+### How to get it running
 
 Get the script running:
 
