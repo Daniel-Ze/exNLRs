@@ -4,6 +4,8 @@ echo "#"
 echo "# Calling shell script from: "$(dirname $0)
 
 NLRparserHome=$HOME'/path/to/NLR-parser/' # Edit this line to get the path to your NLR-parser directrory
+
+# Setting up variables
 wd=$(dirname $1)
 SeqFile=$(basename -- "$1")
 SeqFileName="$(echo $SeqFile | cut -d'.' -f1)"
