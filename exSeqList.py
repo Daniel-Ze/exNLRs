@@ -120,7 +120,6 @@ def main():
     indexList, count1 = findIndexOfSeq(file.file_lines_seqIDs)
     print("exSeqList.py - Number of sequences to extract: " + str(count1))
     seq = extractSeqs(indexList)
-    #print(seq)
     out.write(seq)
     out.close()
 
