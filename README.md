@@ -9,7 +9,7 @@ Citing NLR-parser:
 > **NLR-parser: Rapid annotation of plant NLR complements**\
 > Steuernagel, B., Jupe, F., Witek, K., Jones, J. D.G., Wulff, B. B.H.\
 > Bioinformatics 2015\
-> doi: 10.1093/bioinformatics/btv005\
+> doi: 10.1093/bioinformatics/btv005
 
 > **Identification and localisation of the NB-LRR gene family within the potato genome**\
 > Jupe, F., Pritchard, L., Etherington, G. J., MacKenzie, K., Cock, P. J.A., Wright, F., Sharma, S. K., Bolser, D., Bryan, G. J., Jones, J. D.G., Hein, I.\
