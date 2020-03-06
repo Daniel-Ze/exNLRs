@@ -3,7 +3,7 @@ echo "#"
 echo "# Calling shell script from: "$(dirname $0)
 
 ###################################################
-NLRparserHome=$HOME'/PostDoc/Programs/NLRparser/' # Edit this line to get the path to your NLR-parser directrory
+NLRparserHome=$HOME'/PostDoc/Programs/NLRparser/' #  Edit this line to get the path to your NLR-parser directrory
 ###################################################
 
 # Setting up variables
@@ -29,14 +29,18 @@ if [ -z "$1" ]
             echo "#  - "$wd"/NLR already exists"
       fi
       echo "#  - Starting mast "$(mast -version)" with NLRparser meme.xml"
+
       mast $NLRparserHome'/meme.xml' $1 -o $wd'/NLR/meme' | tee $wd'/NLR/exNLRs.stderr'
+
       echo "#  - mast results are written to NLR/meme/"
       echo "#"
       echo "# --------------------------------------------------------"
       echo "#"
       echo "# Parsing mast results"
       echo "#  - Parsing mast results with NLRparser"
+
       java -jar $NLRparserHome'NLR-parser.jar' -i $wd'/NLR/meme/mast.xml' -a $1 -o $wd'/NLR/'$SeqFileName'.nlrparser' 2>> $wd'/NLR/exNLRs.stderr'
+
       echo "#  - NLRparser results written to NLR/"$SeqFileName".nlrparser"
       echo "#"
       echo "# --------------------------------------------------------"
@@ -65,14 +69,14 @@ if [ -z "$1" ]
       # Call Rscript to plot the stats in a bar plot:
       Rscript $NLRparserHome'/plot-nlr.r' $wd'/NLR/'$SeqFileName'.nlrparser.stats' --save 2>> $wd'/NLR/exNLRs.stderr'
 
-      # If there are no complete NLRs predicted just exit without further steps
-      if [ $(grep -w 'complete' $NLRs | wc -l) == 0 ]
+      # If there are no NLRs predicted just exit without further steps
+      if [ $(wc -l $NLRs) == 0 ]
           then
             echo ""
             echo "# Nothing to do here. No complete NLRs predicted."
-            echo "# Date:                                                          "$(date +%d-%m-%Y_%H-%M-%S)
+            echo "# Date:                          "$(date +%d-%m-%Y_%H-%M-%S)
             exit 1
-      # If there are complte NLRs predicted then extract them to a file for further processing
+      # If there are complete NLRs predicted then extract them to a file for further processing
           else
             echo "# "
             echo "# Extracting sequence names of "$(grep -w 'complete' $NLRs | wc -l)" complete and "$(grep -w 'partial' $NLRs | wc -l)" partial NLRs"
@@ -105,9 +109,11 @@ if [ -z "$1" ]
             echo "# "
             echo "# --------------------------------------------------------"
             echo "#"
-            echo "# Sequences of complete and partial NLRs (CNL and TNL) extracted"
+            echo "# Sequences of complete and partial NLRs (CNL, TNL, NA) extracted"
             echo "# Cleaning"
+
             rm $NLRs 2>> $wd'/NLR/exNLRs.stderr'
+
             echo "# Date:                          "$(date +%d-%m-%Y_%H-%M-%S)
       fi
 fi
