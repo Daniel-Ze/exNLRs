@@ -3,8 +3,6 @@
 echo "#"
 echo "# Calling shell script from: "$(dirname $0)
 
-
-
 NLRparserHome=$HOME'/path/to/NLR-parser/' # Edit this line to get the path to your NLR-parser directrory
 wd=$(dirname $1)
 SeqFile=$(basename -- "$1")
