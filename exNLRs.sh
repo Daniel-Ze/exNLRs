@@ -3,7 +3,9 @@
 echo "#"
 echo "# Calling shell script from: "$(dirname $0)
 
+###################################################
 NLRparserHome=$HOME'/PostDoc/Programs/NLRparser/' # Edit this line to get the path to your NLR-parser directrory
+###################################################
 
 # Setting up variables
 wd=$(dirname $1)
