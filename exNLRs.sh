@@ -70,7 +70,7 @@ if [ -z "$1" ]
       Rscript $NLRparserHome'/plot-nlr.r' $wd'/NLR/'$SeqFileName'.nlrparser.stats' --save 2>> $wd'/NLR/exNLRs.stderr'
 
       # If there are no NLRs predicted just exit without further steps
-      if [ $(wc -l $NLRs) == 0 ]
+      if [ $(wc -l < $NLRs) == 0 ]
           then
             echo ""
             echo "# Nothing to do here. No complete NLRs predicted."
