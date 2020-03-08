@@ -2,7 +2,7 @@
 
 ## Description
 
-The shell script exNLRs.sh was written around the java application NLR-parser.jar by Steuernagel et al., 2015 to automate the extraction of NLRs after prediction of proteins. The script takes in a multifasta file and runs NLR-parser over it. NLR-parser is run with standard settings (p-value 1E-5) and complete and partial NLRs are written to multifasta file.
+The shell script exNLRs.sh was written around the java application NLR-parser.jar by Steuernagel et al., 2015 to automate the extraction of NLRs after prediction of proteins. The script takes in a multifasta file and runs NLR-parser over it. NLR-parser is run with standard settings (p-value 1E-5) and complete and partial NLRs are written to multifasta file plus the NB-Arc domain sequences are written in multifasta files from complete and partial NLRs.
 
 Citing NLR-parser:
 
@@ -27,7 +27,7 @@ Github page of NLR-parser:
   3. parse mast results with NLR-parser.jar
   4. generate some stats about the amount of different NLRs identified with mast
   5. plot the stats with plot-nlr.r
-  6. extract the **complete** and **partial** NLR sequence names and subsequently the corresponding sequence with exSeqList.py (exSeqList.py can extract any fasta sequence from any multifasta file: exSeqList.py seqNames multifasta.fa)
+  6. extract the **complete** and **partial** NLR sequence names and subsequently the corresponding sequence with exSeqList.py (exSeqList.py can extract any fasta sequence from any multifasta file: exSeqList.py seqNames multifasta.fa) plus NB-Arc domain multifata files  with exNB.py.
   7. everythings saved in the directory NLR
   8. all errors are printed to file exNLR.stderr
 
