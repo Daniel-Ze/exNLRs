@@ -101,16 +101,18 @@ def extractSeqs(indexList):
     """function to extract the sequences"""
     file = File()
     seq = ''
+    count = 0
     for ind in indexList:
         seq = seq + file.file_lines_multiFasta[ind] + "\n"
         ind = ind + 1
+        count = count + 1
         while ind < len(file.file_lines_multiFasta):
             if '>' not in file.file_lines_multiFasta[ind]:
                 seq = seq + file.file_lines_multiFasta[ind] + "\n"
                 ind = ind + 1
             else:
                 break
-    return seq
+    return seq, count
 
 def main():
     now = datetime.datetime.now()
@@ -118,8 +120,10 @@ def main():
     out = open(file.file_input_seqID + '.fa', 'w')
     count1 = 0
     indexList, count1 = findIndexOfSeq(file.file_lines_seqIDs)
-    print("exSeqList.py - Number of sequences to extract: " + str(count1))
-    seq = extractSeqs(indexList)
+    print("#\texSeqList.py:")
+    print("#\t - Number of sequences to extract: " + str(count1))
+    seq, count2 = extractSeqs(indexList)
+    print("#\t - Number of sequences extracted: " + str(count2))
     out.write(seq)
     out.close()
 

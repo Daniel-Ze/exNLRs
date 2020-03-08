@@ -68,7 +68,8 @@ def exNB(lines):
     file = File()
     seq = ''
     seq_fail = ''
-    count = 0
+    count_ok = 0
+    count_na = 0
     for line in lines:
         if line != "":
             line_sep = line.split("\t")
@@ -76,11 +77,13 @@ def exNB(lines):
             if line_sep[5] != "N/A":
                 seq = seq + ">" + line_sep[0] + "_nb\n"
                 seq = seq + line_sep[5] + "\n"
-                count = count + 1
+                count_ok = count_ok + 1
             else:
                 seq_fail = seq_fail + ">" + line_sep[0] + "\n"
+                count_na = count_na + 1
 
-    return seq, seq_fail, count
+
+    return seq, seq_fail, count_ok, count_na
 
 def main():
     file = File()
@@ -89,7 +92,10 @@ def main():
     file_name = ''.join(file_name[-1:])
     out1 = open(cwd + '/' + file_name + '.nb.fa', 'w')
     out2 = open(cwd + '/' + file_name + '.nb_failed.lst', 'w')
-    nb, nb_fail, count1 = exNB(file.file_lines1)
+    nb, nb_fail, count_ok, count_na = exNB(file.file_lines1)
+    print("#\texNB.py Resutls:")
+    print("#\t"+str(count_ok)+"\tNB-Arc")
+    print("#\t"+str(count_na)+"\tN/A")
     out1.write(nb)
     out2.write(nb_fail)
     out1.close()
