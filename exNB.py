@@ -35,9 +35,9 @@ class File():
             self.file_input_name1 = sys.argv[1]
             if self.file_input_name1 == "h" or self.file_input_name1 == "-h" or self.file_input_name1 == "-help" or self.file_input_name1 == "help":
                 print(" _________________________________________________________________________________________")
-                print("|Translate coding sequences into protein sequences. Only true CDSs are translated!        |\n|")
-                print("|To use this script type:           python /path/to/transProt.py /path/to/Fasta.fa        |\n|")
-                print("|If still in desperate need for help see: https://github.com/zendl0r/sequence_annotation  |")
+                print("|Extract the NB-Arc domain sequence and with gene name into a multifasta file             |\n|")
+                print("|To use this script type:           python /path/to/exNB.py /path/to/Fasta.fa        |\n|")
+                print("|If still in desperate need for help see: https://github.com/daniel-ze/exNLRs             |")
                 print(" ----------------------------------------------------------------------------------------- ")
                 exit()
             self.working_path = os.path.dirname(os.path.realpath(sys.argv[1]))

@@ -48,7 +48,7 @@ class File():
                 print(" _________________________________________________________________________________________")
                 print("|Extract sequences from a multi Fasta file using a sequence name list.                    |\n|")
                 print("|Type: python seqIDs_file multiFasta.fa                                                   |\n|")
-                print("|If still in desperate need for help see: https://github.com/zendl0r/sequence_annotation  |")
+                print("|If still in desperate need for help see: https://github.com/daniel-ze/exNLRs             |")
                 print(" ----------------------------------------------------------------------------------------- ")
                 exit()
             self.file_input_multiFasta = sys.argv[2]
