@@ -91,19 +91,27 @@ if [ -z "$1" ]
             echo "# "
             echo "# --------------------------------------------------------"
             echo "# "
-            echo "# Extracting complete NLR sequences"
+            echo "# Extracting complete NLR sequences and NB-Arc domains"
             echo "#  - running python script exSeqList.py"
 
             python $NLRparserHome'/exSeqList.py' $wd'/NLR/'$SeqFileName'.complete.nlrparser.seqname' $1 2>> $wd'/NLR/exNLRs.stderr'
+
+            echo "#  - running python script exNB.py"
+
+            python $NLRparserHome'/exNB.py' $wd'/NLR/'$SeqFileName'.complete.nlrparser' 2>> $wd'/NLR/exNLRs.stderr'
 
             echo "#  - Fasta file with complete NLRs written to "$wd'/NLR/'$SeqFileName'.complete.nlrparser.seqname.fa'
             echo "# "
             echo "# --------------------------------------------------------"
             echo "# "
-            echo "# Extracting partial NLR sequences"
+            echo "# Extracting partial NLR sequences and NB-Arc domains"
             echo "#  - running python script exSeqList.py"
 
             python $NLRparserHome'/exSeqList.py' $wd'/NLR/'$SeqFileName'.partial.nlrparser.seqname' $1 2>> $wd'/NLR/exNLRs.stderr'
+
+            echo "#  - running python script exNB.py"
+
+            python $NLRparserHome'/exNB.py' $wd'/NLR/'$SeqFileName'.partial.nlrparser' 2>> $wd'/NLR/exNLRs.stderr'
 
             echo "#  - Fasta file with complete NLRs written to "$wd'/NLR/'$SeqFileName'.partial.nlrparser.seqname.fa'
             echo "# "
