@@ -39,7 +39,7 @@ Dependencies of this script:
   - Rscript
     - library: ggplot2
   - python 2.7 or 3.6
-    - python script exSeqList.py
+    - python script exSeqList.py, exNB.py
 
 ### How to get it running
 
