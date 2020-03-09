@@ -51,7 +51,7 @@ if [ -z "$1" ]
       NLRs=$wd'/NLR/'$SeqFileName'.nlrparser1'
 
       # Some stats about the predicted NLRs:
-      echo "$(wc -l $NLRs | cut -f 1 -d '/')\ttotal" | tee $wd'/NLR/'$SeqFileName'.nlrparser.stats'
+      echo "$(wc -l < $NLRs | cut -f 1 -d '/')\ttotal" | tee $wd'/NLR/'$SeqFileName'.nlrparser.stats'
 
       echo "$(grep -w 'complete' $NLRs | wc -l)\tcomplete NLRs" | tee -a $wd'/NLR/'$SeqFileName'.nlrparser.stats'
       echo "$(grep -w 'CNL.*complete' $NLRs | wc -l)\tcomplete CNLs" | tee -a $wd'/NLR/'$SeqFileName'.nlrparser.stats'
