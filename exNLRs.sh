@@ -3,7 +3,7 @@ echo "#"
 echo "# Calling shell script from: "$(dirname $0)
 
 ###################################################
-NLRparserHome=$HOME'/PostDoc/Programs/NLRparser/' #  Edit this line to get the path to your NLR-parser directrory
+NLRparserHome=$HOME'/PostDoc/Programs/NLRparser/' #  Edit this line to get thepath to your NLR-parser directrory
 ###################################################
 
 # Setting up variables
@@ -76,13 +76,18 @@ if [ -z "$1" ]
             echo "# Nothing to do here. No complete NLRs predicted."
             echo "# Date:                          "$(date +%d-%m-%Y_%H-%M-%S)
             exit 1
-      # If there are complete NLRs predicted then extract them to a file for further processing
           else
             echo "# "
             echo "# Extracting sequence names of "$(grep -w 'complete' $NLRs | wc -l)" complete and "$(grep -w 'partial' $NLRs | wc -l)" partial NLRs"
 
             grep -w 'complete' $NLRs > $wd'/NLR/'$SeqFileName'.complete.nlrparser' 2>> $wd'/NLR/exNLRs.stderr'
             cut -f 1 $wd'/NLR/'$SeqFileName'.complete.nlrparser' > $wd'/NLR/'$SeqFileName'.complete.nlrparser.seqname' 2>> $wd'/NLR/exNLRs.stderr'
+
+            grep -w 'CNL' $wd'/NLR/'$SeqFileName'.complete.nlrparser' > $wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser' 2>> $wd'/NLR/exNLRs.stderr'
+            cut -f 1 $wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser' > $wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser.seqname' 2>> $wd'/NLR/exNLRs.stderr'
+
+            grep -w 'TNL' $wd'/NLR/'$SeqFileName'.complete.nlrparser' > $wd'/NLR/'$SeqFileName'.TNL.complete.nlrparser' 2>> $wd'/NLR/exNLRs.stderr'
+            cut -f 1 $wd'/NLR/'$SeqFileName'.TNL.complete.nlrparser' > $wd'/NLR/'$SeqFileName'.TNL.complete.nlrparser.seqname' 2>> $wd'/NLR/exNLRs.stderr'
 
             grep -w 'partial' $NLRs > $wd'/NLR/'$SeqFileName'.partial.nlrparser' 2>> $wd'/NLR/exNLRs.stderr'
             cut -f 1 $wd'/NLR/'$SeqFileName'.partial.nlrparser' > $wd'/NLR/'$SeqFileName'.partial.nlrparser.seqname' 2>> $wd'/NLR/exNLRs.stderr'
@@ -104,6 +109,56 @@ if [ -z "$1" ]
             echo "# "
             echo "# --------------------------------------------------------"
             echo "# "
+            echo "# Extracting complete CNL sequences and NB-Arc domains"
+            echo "#  - running python script exSeqList.py"
+
+            python $NLRparserHome'/exSeqList.py' $wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser.seqname' $1 2>> $wd'/NLR/exNLRs.stderr'
+
+            echo "#  - running python script exNB.py"
+
+            python $NLRparserHome'/exNB.py' $wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser' 2>> $wd'/NLR/exNLRs.stderr'
+
+            echo "#  - Fasta file with complete CNLs written to "$wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser.seqname.fa'
+            echo "# "
+            echo "# --------------------------------------------------------"
+            echo "# "
+            echo "# Searching for MADA motif in extracted complete CNLs"
+            echo "#  - running hmmersearch with MADA.hmm"
+
+            hmmsearch --max --tblout $wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser.seqname.mada.tbl' -o $wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser.seqname.mada' $NLRparserHome'/mada.hmm' $wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser.seqname.fa' 2>> $wd'/NLR/exNLRs.stderr'
+
+            echo "#  - hmmersearch results written to: - "$wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser.seqname.mada'
+            echo "#                                    - "$wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser.seqname.mada.tbl'
+            echo "#  - extracting CNL sequences and their NB domain with MADA motif"
+            echo "#    - extracting sequences with full e-value < 0.01"
+
+            grep -v "^#" $wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser.seqname.mada.tbl' | awk '$5<0.01' | cut -d ' ' -f 1 > $wd'/NLR/'$SeqFileName'.CNL.mada.seqname' 2>> $wd'/NLR/exNLRs.stderr'
+            <$wd'/NLR/'$SeqFileName'.CNL.mada.seqname' xargs -I % grep -e % $wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser' > $wd'/NLR/'$SeqFileName'.CNL.mada.seqname.nb' 2>> $wd'/NLR/exNLRs.stderr'
+
+            echo "#    -"$(wc -l < $wd'/NLR/'$SeqFileName'.CNL.mada.seqname')" CNLs with MADA motif to extract"
+
+            python $NLRparserHome'/exSeqList.py' $wd'/NLR/'$SeqFileName'.CNL.mada.seqname' $wd'/NLR/'$SeqFileName'.CNL.complete.nlrparser.seqname.fa' 2>> $wd'/NLR/exNLRs.stderr'
+            python $NLRparserHome'/exNB.py' $wd'/NLR/'$SeqFileName'.CNL.mada.seqname.nb' 2>> $wd'/NLR/exNLRs.stderr'
+
+            echo "# "
+            echo "#  - Fasta files with MADA CNLs and MADA CNLs NB domain written to:"
+            echo "#    - MADA CNLs:    " $wd'/NLR/'$SeqFileName'.CNL.mada.seqname.fa'
+            echo "#    - MADA CNLs NB: " $wd'/NLR/'$SeqFileName'.CNL.mada.seqname.nb.nb.fa'
+            echo "# --------------------------------------------------------"
+            echo "# "
+            echo "# Extracting complete TNL sequences and NB-Arc domains"
+            echo "#  - running python script exSeqList.py"
+
+            python $NLRparserHome'/exSeqList.py' $wd'/NLR/'$SeqFileName'.TNL.complete.nlrparser.seqname' $1 2>> $wd'/NLR/exNLRs.stderr'
+
+            echo "#  - running python script exNB.py"
+
+            python $NLRparserHome'/exNB.py' $wd'/NLR/'$SeqFileName'.TNL.complete.nlrparser' 2>> $wd'/NLR/exNLRs.stderr'
+
+            echo "#  - Fasta file with complete CNLs written to "$wd'/NLR/'$SeqFileName'.TNL.complete.nlrparser.seqname.fa'
+            echo "# "
+            echo "# --------------------------------------------------------"
+            echo "# "
             echo "# Extracting partial NLR sequences and NB-Arc domains"
             echo "#  - running python script exSeqList.py"
 
@@ -113,7 +168,7 @@ if [ -z "$1" ]
 
             python $NLRparserHome'/exNB.py' $wd'/NLR/'$SeqFileName'.partial.nlrparser' 2>> $wd'/NLR/exNLRs.stderr'
 
-            echo "#  - Fasta file with complete NLRs written to "$wd'/NLR/'$SeqFileName'.partial.nlrparser.seqname.fa'
+            echo "#  - Fasta file with partial NLRs written to "$wd'/NLR/'$SeqFileName'.partial.nlrparser.seqname.fa'
             echo "# "
             echo "# --------------------------------------------------------"
             echo "#"
@@ -121,6 +176,43 @@ if [ -z "$1" ]
             echo "# Cleaning"
 
             rm $NLRs 2>> $wd'/NLR/exNLRs.stderr'
+            mkdir $wd'/NLR/seqname'
+
+            SEQNAME=$wd'/NLR/'*.seqname
+            echo "#  - Moving all files with sequence names to /NLR/seqname"
+            for f in $SEQNAME
+            do
+              mv $f $wd'/NLR/seqname'
+            done
+
+            mkdir $wd'/NLR/fasta'
+            FASTA=$wd'/NLR/'*.fa
+            echo "#  - Moving all fasta files to /NLR/fasta"
+            for f in $FASTA
+            do
+              mv $f $wd'/NLR/fasta'
+            done
+
+            mkdir $wd'/NLR/nlrparser'
+            NLRPARSER=$wd'/NLR/'*.nlrparser
+            echo "#  - Moving all nlrparser files to /NLR/nlrparser"
+            for f in $NLRPARSER
+            do
+              mv $f $wd'/NLR/nlrparser'
+            done
+
+            mkdir $wd'/NLR/mada'
+            MADA=$wd'/NLR/'*.mada*
+            echo "#  - Moving all mada related files to /NLR/mada"
+            for f in $MADA
+            do
+              echo $f
+              mv $f $wd'/NLR/mada'
+            done
+
+            mkdir $wd'/NLR/plot'
+            mv $wd'/NLR/'$SeqFileName'.nlrparser.stats' $wd'/NLR/plot'
+            mv $wd'/NLR/'$SeqFileName'.nlrparser.stats.pdf' $wd'/NLR/plot'
 
             echo "# Date:                          "$(date +%d-%m-%Y_%H-%M-%S)
       fi
