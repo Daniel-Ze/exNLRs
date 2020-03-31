@@ -50,6 +50,9 @@ Dependencies of this script:
   - python 2.7 or 3.6
     - python script exSeqList.py, exNB.py
   - HMMER 3.2.1
+  - download MADA.hmm: https://elifesciences.org/download/aHR0cHM6Ly9jZG4uZWxpZmVzY2llbmNlcy5vcmcvYXJ0aWNsZXMvNDk5NTYvZWxpZmUtNDk5NTYtc3VwcDItdjIuaG1t/elife-49956-supp2-v2.hmm?_hash=57ZnZsThc0bH7%2BYiqwC70b94%2F6PuiEzSL0QYmpp%2F4KM%3D
+    - name the .hmm file mada.hmm
+    - copy in NLR-parser directory
 
 ### How to get it running
 
@@ -64,8 +67,6 @@ Get the script running:
     - $ chmod a+x /usr/local/bin/exNLRs.sh
   - Run the script:
     - $ exNLRs.sh /path/to/fasta/file.fa
-  - download MADA.hmm: https://elifesciences.org/download/aHR0cHM6Ly9jZG4uZWxpZmVzY2llbmNlcy5vcmcvYXJ0aWNsZXMvNDk5NTYvZWxpZmUtNDk5NTYtc3VwcDItdjIuaG1t/elife-49956-supp2-v2.hmm?_hash=57ZnZsThc0bH7%2BYiqwC70b94%2F6PuiEzSL0QYmpp%2F4KM%3D
-    - name the .hmm file mada.hmm
-    - copy in NLR-parser directory
+ 
 
 Tested on MacOS and Ubuntu Linux.
